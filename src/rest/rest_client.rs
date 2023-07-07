@@ -231,6 +231,7 @@ impl GateFiRestClient {
     }
 }
 
+#[derive(Debug)]
 pub struct GateFiBuyAssetParams {
     pub amount: String,
     pub crypto: String,
@@ -242,6 +243,7 @@ pub struct GateFiBuyAssetParams {
     pub wallet_address: String,
 }
 
+#[derive(Debug)]
 pub enum GateFiBuyAssetPaymentMethod {
     DebitCreditCard,
     ApplePay,
