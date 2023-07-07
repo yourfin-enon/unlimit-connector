@@ -1,12 +1,24 @@
 use crate::rest::endpoints::GateFiEndpoint;
 use ring::{hmac};
 
-#[derive(Clone)]
-pub struct RequestSigner {
+#[derive(Debug, Clone)]
+pub struct GateFiSigner {}
+
+impl GateFiSigner {
+    pub fn generate_sign(key: &str, data: &str) -> String {
+        let key = hmac::Key::new(hmac::HMAC_SHA256, key.as_bytes());
+        let signature = hmac::sign(&key, data.as_bytes());
+
+        signature.as_ref().iter().map(|byte| format!("{:02x}", byte)).collect()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct GateFiRequestSigner {
     secret_key: String,
 }
 
-impl RequestSigner {
+impl GateFiRequestSigner {
     pub fn new(secret_key: String) -> Self {
         Self { secret_key }
     }
@@ -14,10 +26,8 @@ impl RequestSigner {
     pub fn generate_sign(&self, endpoint: &GateFiEndpoint) -> String {
         let http_method = endpoint.get_http_method();
         let data = format!("{}{}", http_method.as_str(), String::from(endpoint));
-        let key = hmac::Key::new(hmac::HMAC_SHA256, self.secret_key.as_bytes());
-        let signature = hmac::sign(&key, data.as_bytes());
 
-        signature.as_ref().iter().map(|byte| format!("{:02x}", byte)).collect()
+        GateFiSigner::generate_sign(&self.secret_key, &data)
     }
 }
 
@@ -28,7 +38,7 @@ mod tests {
     #[test]
     fn generate_sign() {
         let key = "BKxkBRExdqfREsPwEwbydIBSEGssHNAo".to_string();
-        let client = RequestSigner::new(key.clone());
+        let client = GateFiRequestSigner::new(key.clone());
 
         let sign = client.generate_sign(&GateFiEndpoint::GetPlatformConfig, None);
 

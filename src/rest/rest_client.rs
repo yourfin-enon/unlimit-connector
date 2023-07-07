@@ -5,7 +5,7 @@ use crate::rest::models::{
     GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPlatformConfigResponse, GetQuoteRequest,
     GetQuoteResponse,
 };
-use crate::rest::request_signer::RequestSigner;
+use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 use reqwest::Response;
@@ -16,7 +16,7 @@ use std::fmt;
 
 #[derive(Clone)]
 pub struct GateFiRestClient {
-    signer: RequestSigner,
+    signer: GateFiRequestSigner,
     access_key: String,
     host: String,
     inner_client: reqwest::Client,
@@ -31,7 +31,7 @@ impl GateFiRestClient {
         config: GateFiApiConfig,
     ) -> Self {
         Self {
-            signer: RequestSigner::new(secret_key),
+            signer: GateFiRequestSigner::new(secret_key),
             access_key,
             host: config.rest_api_host,
             inner_client: reqwest::Client::new(),
