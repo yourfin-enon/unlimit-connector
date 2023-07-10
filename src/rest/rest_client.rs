@@ -1,7 +1,7 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRates, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
+use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};

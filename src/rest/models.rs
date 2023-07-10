@@ -119,13 +119,13 @@ pub struct GateFiPaymentConfigResponse {
     #[serde(rename = "availableCountries")]
     pub available_countries: Vec<String>,
     #[serde(rename = "fiat")]
-    pub fiat_assets: HashMap<String, GateFiGateFiPaymentAsset>,
+    pub fiat_assets: HashMap<String, GateFiGateFiFiatAsset>,
     #[serde(rename = "crypto")]
-    pub crypto_assets: HashMap<String, GateFiGateFiPaymentAsset>,
+    pub crypto_assets: HashMap<String, GateFiGateFiCryptoAsset>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GateFiGateFiPaymentAsset {
+pub struct GateFiGateFiFiatAsset {
     pub methods: HashMap<String, GateFiGateFiPaymentMethodInfo>,
 }
 
@@ -135,11 +135,26 @@ pub struct GateFiGateFiPaymentMethodInfo {
     pub max: f64,
     #[serde(rename = "processingFee")]
     pub processing_fee_percent: f64,
-    pub precision: f64,
+    pub precision: i32,
     #[serde(rename = "processingFeeFix")]
     pub processing_fee_fix: f64,
-    #[serde(rename = "processingFeeFixMin")]
+    #[serde(rename = "processingFeeMin")]
     pub processing_fee_min: f64,
     #[serde(rename = "openMode")]
     pub open_mode: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiGateFiCryptoAsset {
+    pub title: String,
+    #[serde(rename = "type")]
+    pub chain: String,
+    pub symbol: String,
+    #[serde(rename = "chainId")]
+    pub chain_id: String,
+    #[serde(rename = "networkFee")]
+    pub network_fee: f64,
+    pub precision: i32,
+    pub min: f64,
+    pub max: f64,
 }
