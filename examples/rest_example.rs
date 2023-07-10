@@ -12,6 +12,7 @@ async fn main() {
         "test".to_owned(),
         GateFiApiConfig::sandbox());
     get_platform_config(&client).await;
+    get_payment_config(&client).await;
     get_rates(&client).await;
     get_quote(&client).await;
     buy_asset(&client).await;
@@ -53,4 +54,9 @@ async fn get_platform_config(client: &GateFiRestClient) {
 async fn get_rates(client: &GateFiRestClient) {
     let result = client.get_rates("BTC").await;
     println!("get_rates result: {result:?}");
+}
+
+async fn get_payment_config(client: &GateFiRestClient) {
+    let result = client.get_payment_config().await;
+    println!("get_payment_config result: {result:?}");
 }

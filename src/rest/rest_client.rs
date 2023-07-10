@@ -1,7 +1,7 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPlatformConfigResponse, GateFiRates, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
+use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRates, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
@@ -71,6 +71,14 @@ impl GateFiRestClient {
         };
 
         Ok(rates.rates)
+    }
+
+    pub async fn get_payment_config(&self) -> Result<GateFiPaymentConfigResponse, Error> {
+        let resp: GateFiPaymentConfigResponse = self
+            .get_signed(GateFiEndpoint::PaymentConfig, None)
+            .await?;
+
+        Ok(resp)
     }
 
     pub async fn buy_asset(

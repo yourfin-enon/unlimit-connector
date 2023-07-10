@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GetQuoteRequest {
@@ -110,4 +110,36 @@ pub struct GateFiRatesResponse {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GateFiRates {
     pub rates: HashMap<String, f64>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiPaymentConfigResponse {
+    #[serde(rename = "availableNationalities")]
+    pub available_nationalities: Vec<String>,
+    #[serde(rename = "availableCountries")]
+    pub available_countries: Vec<String>,
+    #[serde(rename = "fiat")]
+    pub fiat_assets: HashMap<String, GateFiGateFiPaymentAsset>,
+    #[serde(rename = "crypto")]
+    pub crypto_assets: HashMap<String, GateFiGateFiPaymentAsset>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiGateFiPaymentAsset {
+    pub methods: HashMap<String, GateFiGateFiPaymentMethodInfo>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiGateFiPaymentMethodInfo {
+    pub min: f64,
+    pub max: f64,
+    #[serde(rename = "processingFee")]
+    pub processing_fee_percent: f64,
+    pub precision: f64,
+    #[serde(rename = "processingFeeFix")]
+    pub processing_fee_fix: f64,
+    #[serde(rename = "processingFeeFixMin")]
+    pub processing_fee_min: f64,
+    #[serde(rename = "openMode")]
+    pub open_mode: String,
 }
