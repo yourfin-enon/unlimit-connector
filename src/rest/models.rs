@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -99,4 +100,14 @@ pub struct GateFiBuyAssetRequest {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GateFiBuyAssetResponse {
     pub redirect_url: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiRatesResponse {
+    pub list: HashMap<String, GateFiRates>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiRates {
+    pub rates: HashMap<String, f64>,
 }

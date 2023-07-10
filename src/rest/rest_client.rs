@@ -1,10 +1,7 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{
-    GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPlatformConfigResponse, GetQuoteRequest,
-    GetQuoteResponse,
-};
+use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPlatformConfigResponse, GateFiRates, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
@@ -61,6 +58,19 @@ impl GateFiRestClient {
             .await?;
 
         Ok(resp)
+    }
+
+    pub async fn get_rates(&self, asset: &str) -> Result<HashMap<String, f64>, Error> {
+        let mut resp: GateFiRatesResponse = self
+            .get_signed(GateFiEndpoint::Rates, None)
+            .await?;
+        let rates = resp.list.remove(asset);
+
+        let Some(rates) = rates else {
+            return Ok(HashMap::new());
+        };
+
+        Ok(rates.rates)
     }
 
     pub async fn buy_asset(

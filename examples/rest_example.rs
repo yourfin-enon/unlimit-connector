@@ -12,6 +12,7 @@ async fn main() {
         "test".to_owned(),
         GateFiApiConfig::sandbox());
     get_platform_config(&client).await;
+    get_rates(&client).await;
     get_quote(&client).await;
     buy_asset(&client).await;
 }
@@ -19,11 +20,11 @@ async fn main() {
 async fn get_quote(client: &GateFiRestClient) {
     let address = client
         .get_quote(
-            "100",
+            "500",
             "BTC",
-            "USD",
+            "MXN",
             &GateFiBuyAssetPaymentMethod::DebitCreditCard,
-            "BR",
+            "MX",
         )
         .await;
     println!("get_quote result: {address:?}");
@@ -38,7 +39,7 @@ async fn buy_asset(client: &GateFiRestClient) {
         payment_method: GateFiBuyAssetPaymentMethod::DebitCreditCard,
         redirect_url: "google.com".to_string(),
         region: "BR".to_string(),
-        wallet_address: "2Mxsqy9d6LuW2VYQPsojmPWXaRznMQ7Nifr2".to_string(),
+        wallet_address: "2Mxsqy9d6LuW2VYQPsojmPWXaRznMQ7Nifr".to_string(),
     };
     let result = client.buy_asset(params).await;
     println!("buy_asset result: {result:?}");
@@ -47,4 +48,9 @@ async fn buy_asset(client: &GateFiRestClient) {
 async fn get_platform_config(client: &GateFiRestClient) {
     let result = client.get_platform_config().await;
     println!("get_config result: {result:?}");
+}
+
+async fn get_rates(client: &GateFiRestClient) {
+    let result = client.get_rates("BTC").await;
+    println!("get_rates result: {result:?}");
 }
