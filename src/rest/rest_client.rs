@@ -57,7 +57,7 @@ impl GateFiRestClient {
         };
         let query_string = serde_qs::to_string(&request).unwrap(); // todo: handle err
         let resp: GetQuoteResponse = self
-            .get_signed(GateFiEndpoint::GetQuote, Some(&query_string))
+            .get_signed(GateFiEndpoint::Quotes, Some(&query_string))
             .await?;
 
         Ok(resp)
@@ -97,7 +97,7 @@ impl GateFiRestClient {
 
     pub async fn get_platform_config(&self) -> Result<GateFiPlatformConfigResponse, Error> {
         let resp: GateFiPlatformConfigResponse = self
-            .get_signed(GateFiEndpoint::GetPlatformConfig, None)
+            .get_signed(GateFiEndpoint::PlatformConfig, None)
             .await?;
 
         Ok(resp)
@@ -148,6 +148,11 @@ impl GateFiRestClient {
         custom_headers.insert(
             "access-control-allow-headers",
             HeaderValue::from_str("Accept").unwrap(),
+        );
+
+        custom_headers.insert(
+            "X-merchantid",
+            HeaderValue::from_str(self.partner_id.as_str()).unwrap(),
         );
 
         custom_headers.insert(
@@ -257,7 +262,7 @@ pub enum GateFiBuyAssetPaymentMethod {
 impl fmt::Display for GateFiBuyAssetPaymentMethod {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            GateFiBuyAssetPaymentMethod::DebitCreditCard => write!(f, "debit-credit-card"),
+            GateFiBuyAssetPaymentMethod::DebitCreditCard => write!(f, "SPEI"),
             GateFiBuyAssetPaymentMethod::ApplePay => write!(f, "apple-pay"),
             GateFiBuyAssetPaymentMethod::SepaBankTransfer => write!(f, "sepa-bank-transfer"),
             GateFiBuyAssetPaymentMethod::GbpBankTransfer => write!(f, "gbp-bank-transfer"),

@@ -40,7 +40,7 @@ mod tests {
         let key = "BKxkBRExdqfREsPwEwbydIBSEGssHNAo".to_string();
         let client = GateFiRequestSigner::new(key.clone());
 
-        let sign = client.generate_sign(&GateFiEndpoint::GetPlatformConfig);
+        let sign = client.generate_sign(&GateFiEndpoint::PlatformConfig);
 
         let source_sign = "e09cb7d69cef805a0f3092c770df60f2e1e91fb3ebdedc8f85f713a7369ba0e5";
         assert_eq!(source_sign, sign);
