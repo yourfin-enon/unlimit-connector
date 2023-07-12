@@ -1,7 +1,10 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse};
+use crate::rest::models::{
+    GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse,
+    GateFiPlatformConfigResponse, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse,
+};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
@@ -41,7 +44,7 @@ impl GateFiRestClient {
         amount: impl Into<String>,
         crypto_asset: impl Into<String>,
         fiat_asset: impl Into<String>,
-        payment_method: &GateFiBuyAssetPaymentMethod,
+        payment_method: impl Into<String>,
         region: impl Into<String>,
     ) -> Result<GetQuoteResponse, Error> {
         let request = GetQuoteRequest {
@@ -49,7 +52,7 @@ impl GateFiRestClient {
             crypto: crypto_asset.into(),
             fiat: fiat_asset.into(),
             partner_id: self.partner_id.clone(),
-            payment: payment_method.to_string(),
+            payment: payment_method.into(),
             region: region.into(),
         };
         let query_string = serde_qs::to_string(&request).unwrap(); // todo: handle err
@@ -60,23 +63,15 @@ impl GateFiRestClient {
         Ok(resp)
     }
 
-    pub async fn get_rates(&self, asset: &str) -> Result<HashMap<String, f64>, Error> {
-        let mut resp: GateFiRatesResponse = self
-            .get_signed(GateFiEndpoint::Rates, None)
-            .await?;
-        let rates = resp.list.remove(asset);
+    pub async fn get_rates(&self) -> Result<GateFiRatesResponse, Error> {
+        let resp: GateFiRatesResponse = self.get_signed(GateFiEndpoint::Rates, None).await?;
 
-        let Some(rates) = rates else {
-            return Ok(HashMap::new());
-        };
-
-        Ok(rates.rates)
+        Ok(resp)
     }
 
     pub async fn get_payment_config(&self) -> Result<GateFiPaymentConfigResponse, Error> {
-        let resp: GateFiPaymentConfigResponse = self
-            .get_signed(GateFiEndpoint::PaymentConfig, None)
-            .await?;
+        let resp: GateFiPaymentConfigResponse =
+            self.get_signed(GateFiEndpoint::PaymentConfig, None).await?;
 
         Ok(resp)
     }
@@ -260,33 +255,8 @@ pub struct GateFiBuyAssetParams {
     pub crypto: String,
     pub fiat: String,
     pub order_custom_id: String,
-    pub payment_method: GateFiBuyAssetPaymentMethod,
+    pub payment_method: String,
     pub redirect_url: String,
     pub region: String,
     pub wallet_address: String,
-}
-
-#[derive(Debug)]
-pub enum GateFiBuyAssetPaymentMethod {
-    DebitCreditCard,
-    ApplePay,
-    SepaBankTransfer,
-    GbpBankTransfer,
-    AchBankTransfer,
-    Upi,
-    Pix,
-}
-
-impl fmt::Display for GateFiBuyAssetPaymentMethod {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            GateFiBuyAssetPaymentMethod::DebitCreditCard => write!(f, "SPEI"),
-            GateFiBuyAssetPaymentMethod::ApplePay => write!(f, "apple-pay"),
-            GateFiBuyAssetPaymentMethod::SepaBankTransfer => write!(f, "sepa-bank-transfer"),
-            GateFiBuyAssetPaymentMethod::GbpBankTransfer => write!(f, "gbp-bank-transfer"),
-            GateFiBuyAssetPaymentMethod::AchBankTransfer => write!(f, "ach-bank-transfer"),
-            GateFiBuyAssetPaymentMethod::Upi => write!(f, "upi"),
-            GateFiBuyAssetPaymentMethod::Pix => write!(f, "pix"),
-        }
-    }
 }
