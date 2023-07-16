@@ -170,5 +170,5 @@ pub struct GateFiGateCallbackRequest {
     pub tap_on_fee_currency: Option<String>,
     pub transaction_hashes: Option<Vec<String>>,
     pub transaction_id: String,
-
+    pub status: String,
 }
