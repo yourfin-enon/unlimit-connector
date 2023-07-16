@@ -162,15 +162,25 @@ pub struct GateFiCryptoAsset {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GateFiCallbackData {
+    #[serde(rename = "cryptoAmount")]
     pub crypto_amount: String,
+    #[serde(rename = "cryptoCurrency")]
     pub crypto_currency: String,
+    #[serde(rename = "customOrderId")]
     pub custom_order_id: String,
+    #[serde(rename = "destinationWallet")]
     pub destination_wallet: String,
+    #[serde(rename = "fiatCurrency")]
     pub fiat_currency: String,
+    #[serde(rename = "fiatAmount")]
     pub fiat_amount: String,
+    #[serde(rename = "tapOnFeeAmount")]
     pub tap_on_fee_amount: Option<String>,
+    #[serde(rename = "tapOnFeeCurrency")]
     pub tap_on_fee_currency: Option<String>,
+    #[serde(rename = "transactionHashes")]
     pub transaction_hashes: Option<Vec<String>>,
+    #[serde(rename = "transactionId")]
     pub transaction_id: String,
     pub status: String,
 }
