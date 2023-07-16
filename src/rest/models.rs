@@ -166,6 +166,7 @@ pub struct GateFiCallbackData {
     pub crypto_currency: String,
     pub custom_order_id: String,
     pub destination_wallet: String,
+    pub fiat_currency: String,
     pub fiat_amount: String,
     pub tap_on_fee_amount: Option<String>,
     pub tap_on_fee_currency: Option<String>,
