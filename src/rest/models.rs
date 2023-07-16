@@ -158,3 +158,17 @@ pub struct GateFiGateFiCryptoAsset {
     pub min: f64,
     pub max: f64,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiGateCallbackRequest {
+    pub crypto_amount: String,
+    pub crypto_currency: String,
+    pub custom_order_id: String,
+    pub destination_wallet: String,
+    pub fiat_amount: String,
+    pub tap_on_fee_amount: Option<String>,
+    pub tap_on_fee_currency: Option<String>,
+    pub transaction_hashes: Option<Vec<String>>,
+    pub transaction_id: String,
+
+}
