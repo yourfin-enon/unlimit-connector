@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GetQuoteRequest {
@@ -119,18 +120,18 @@ pub struct GateFiPaymentConfigResponse {
     #[serde(rename = "availableCountries")]
     pub available_countries: Vec<String>,
     #[serde(rename = "fiat")]
-    pub fiat_assets: HashMap<String, GateFiGateFiFiatAsset>,
+    pub fiat_assets: HashMap<String, GateFiFiatAsset>,
     #[serde(rename = "crypto")]
-    pub crypto_assets: HashMap<String, GateFiGateFiCryptoAsset>,
+    pub crypto_assets: HashMap<String, GateFiCryptoAsset>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GateFiGateFiFiatAsset {
-    pub methods: HashMap<String, GateFiGateFiPaymentMethodInfo>,
+pub struct GateFiFiatAsset {
+    pub methods: HashMap<String, GateFiPaymentMethodInfo>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GateFiGateFiPaymentMethodInfo {
+pub struct GateFiPaymentMethodInfo {
     pub min: f64,
     pub max: f64,
     #[serde(rename = "processingFee")]
@@ -145,7 +146,7 @@ pub struct GateFiGateFiPaymentMethodInfo {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GateFiGateFiCryptoAsset {
+pub struct GateFiCryptoAsset {
     pub title: String,
     #[serde(rename = "type")]
     pub chain: String,
@@ -160,7 +161,7 @@ pub struct GateFiGateFiCryptoAsset {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct GateFiGateCallbackRequest {
+pub struct GateFiCallbackData {
     pub crypto_amount: String,
     pub crypto_currency: String,
     pub custom_order_id: String,
@@ -171,4 +172,23 @@ pub struct GateFiGateCallbackRequest {
     pub transaction_hashes: Option<Vec<String>>,
     pub transaction_id: String,
     pub status: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum GateFiTransactionStatus {
+    Init = 0,
+    Created = 1,
+    Succeeded = 2,
+    Failed = 3,
+}
+
+impl fmt::Display for GateFiTransactionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            GateFiTransactionStatus::Init => write!(f, "init"),
+            GateFiTransactionStatus::Created => write!(f, "created"),
+            GateFiTransactionStatus::Succeeded => write!(f, "succeeded"),
+            GateFiTransactionStatus::Failed => write!(f, "failed"),
+        }
+    }
 }
