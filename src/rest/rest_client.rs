@@ -12,7 +12,6 @@ use reqwest::Response;
 use reqwest::StatusCode;
 use serde::de::DeserializeOwned;
 use std::collections::HashMap;
-use std::fmt;
 
 #[derive(Clone)]
 pub struct GateFiRestClient {
