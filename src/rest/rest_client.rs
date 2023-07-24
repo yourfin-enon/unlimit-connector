@@ -99,7 +99,7 @@ impl GateFiRestClient {
         let response = client.get(url.as_str()).headers(headers).send().await?;
 
         if response.status() != StatusCode::OK {
-            return self.handler(response, None).await;
+            return self.handler(response, None, &url).await;
         }
 
         Ok(GateFiBuyAssetResponse {
@@ -132,7 +132,7 @@ impl GateFiRestClient {
             .send()
             .await?;
 
-        self.handler(response, Some(request_json)).await
+        self.handler(response, Some(request_json), &url).await
     }
 
     pub async fn get_signed<T: DeserializeOwned>(
@@ -151,7 +151,7 @@ impl GateFiRestClient {
         let headers = self.build_headers(Some(&sign));
         let response = client.get(url.as_str()).headers(headers).send().await?;
 
-        self.handler(response, None).await
+        self.handler(response, None, &url).await
     }
 
     fn build_headers(&self, sign: Option<&str>) -> HeaderMap {
@@ -196,17 +196,18 @@ impl GateFiRestClient {
         &self,
         response: Response,
         request_json: Option<String>,
+        request_url: &str,
     ) -> Result<T, Error> {
         match response.status() {
             StatusCode::OK => {
                 let json: Result<String, _> = response.text().await;
                 let Ok(json) = json else {
-                    bail!("Failed to read response body");
+                    bail!("Failed to read response body. Url {}", request_url);
                 };
 
                 let body: Result<T, _> = serde_json::from_str(&json);
                 if let Err(err) = body {
-                    bail!("Failed to deserialize body {:?}: {}", err, json);
+                    bail!("Url {}. Failed to deserialize body {:?}: {}", request_url, err, json);
                 }
 
                 Ok(body.unwrap())
@@ -224,19 +225,19 @@ impl GateFiRestClient {
                 Ok(body.unwrap())
             }
             StatusCode::INTERNAL_SERVER_ERROR => {
-                bail!("Internal Server Error");
+                bail!("Internal Server Error {}", request_url,);
             }
             StatusCode::SERVICE_UNAVAILABLE => {
-                bail!("Service Unavailable");
+                bail!("Service Unavailable {}", request_url,);
             }
             StatusCode::UNAUTHORIZED => {
-                bail!("Unauthorized");
+                bail!("Unauthorized {}", request_url);
             }
             StatusCode::BAD_REQUEST => {
                 let error = response.text().await?;
                 bail!(format!(
-                    "Received bad request status. Request: {:?}. Response: {:?}",
-                    request_json, error
+                    "Received bad request status. Url: {}. Request: {:?}. Response: {:?}",
+                    request_url, request_json, error
                 ));
             }
             s => {
