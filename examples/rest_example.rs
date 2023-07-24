@@ -1,7 +1,7 @@
 use rust_extensions::date_time::DateTimeAsMicroseconds;
 use unlimit_connector::rest::config::GateFiApiConfig;
 use unlimit_connector::rest::rest_client::{
-    GateFiBuyAssetParams, GateFiBuyAssetPaymentMethod, GateFiRestClient,
+    GateFiBuyAssetParams, GateFiRestClient,
 };
 
 #[tokio::main]
