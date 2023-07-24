@@ -24,7 +24,7 @@ async fn get_quote(client: &GateFiRestClient) {
             "500",
             "BTC",
             "MXN",
-            &GateFiBuyAssetPaymentMethod::DebitCreditCard,
+            "BANKCARD",
             "MX",
         )
         .await;
