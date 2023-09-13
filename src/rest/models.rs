@@ -26,7 +26,7 @@ pub struct GateFiPaymentMethodsRequest {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GateFiPaymentMethodsResponse {
     #[serde(rename = "list")]
-    pub list: Vec<GateFiCurrencyPaymentMethod>,
+    pub list: Option<Vec<GateFiCurrencyPaymentMethod>>,
     #[serde(rename = "total")]
     pub total: i32,
 }
