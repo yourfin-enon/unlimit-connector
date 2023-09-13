@@ -1,5 +1,5 @@
 use crate::rest::endpoints::GateFiEndpoint;
-use ring::{hmac};
+use ring::hmac;
 
 #[derive(Debug, Clone)]
 pub struct GateFiSigner {}
@@ -9,7 +9,11 @@ impl GateFiSigner {
         let key = hmac::Key::new(hmac::HMAC_SHA256, key.as_bytes());
         let signature = hmac::sign(&key, data.as_bytes());
 
-        signature.as_ref().iter().map(|byte| format!("{:02x}", byte)).collect()
+        signature
+            .as_ref()
+            .iter()
+            .map(|byte| format!("{:02x}", byte))
+            .collect()
     }
 }
 

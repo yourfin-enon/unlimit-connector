@@ -28,27 +28,33 @@ pub const CURRENCIES: &[Currency] = &[
         id: "XRP",
         symbol: "XRP",
         blockchain: "XRP",
-    }, Currency {
+    },
+    Currency {
         id: "USDTE",
         symbol: "USDT",
         blockchain: "ERC20",
-    }, Currency {
+    },
+    Currency {
         id: "USDTT",
         symbol: "USDT",
         blockchain: "TRC20",
-    }, Currency {
+    },
+    Currency {
         id: "BNB",
         symbol: "BNB",
         blockchain: "BEP2",
-    }, Currency {
+    },
+    Currency {
         id: "EURS",
         symbol: "EURS",
         blockchain: "EURS",
-    }, Currency {
+    },
+    Currency {
         id: "USDC",
         symbol: "USDC",
         blockchain: "ERC20",
-    }, Currency {
+    },
+    Currency {
         id: "BNB-BSC",
         symbol: "BNB",
         blockchain: "BEP20",

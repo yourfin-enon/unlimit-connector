@@ -6,7 +6,7 @@ pub enum GateFiEndpoint {
     BuyAsset,
     Rates,
     PaymentConfig,
-    PaymentMethods
+    PaymentMethods,
 }
 
 impl From<&GateFiEndpoint> for String {

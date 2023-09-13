@@ -1,7 +1,11 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRatesResponse, GateFiPaymentMethodsRequest, GetQuoteRequest, GetQuoteResponse, GateFiPaymentMethodsResponse};
+use crate::rest::models::{
+    GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse,
+    GateFiPaymentMethodsRequest, GateFiPaymentMethodsResponse, GateFiPlatformConfigResponse,
+    GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse,
+};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
@@ -75,7 +79,9 @@ impl GateFiRestClient {
             country_code: country_code.into(),
         };
         let query = serde_qs::to_string(&request).unwrap();
-        let resp = self.get_signed(GateFiEndpoint::PaymentMethods, Some(&query)).await?;
+        let resp = self
+            .get_signed(GateFiEndpoint::PaymentMethods, Some(&query))
+            .await?;
 
         Ok(resp)
     }

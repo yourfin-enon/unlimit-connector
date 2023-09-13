@@ -1,16 +1,16 @@
 use rust_extensions::date_time::DateTimeAsMicroseconds;
+
 use unlimit_connector::rest::config::GateFiApiConfig;
-use unlimit_connector::rest::rest_client::{
-    GateFiBuyAssetParams, GateFiRestClient,
-};
+use unlimit_connector::rest::rest_client::{GateFiBuyAssetParams, GateFiRestClient};
 
 #[tokio::main]
 async fn main() {
     let client = GateFiRestClient::new(
-        "04e4aa48-a7d6-4890-921f-fa1c6a9fe873".to_owned(),
         "test".to_owned(),
         "test".to_owned(),
-        GateFiApiConfig::sandbox());
+        "test".to_owned(),
+        GateFiApiConfig::sandbox(),
+    );
     get_payment_methods(&client).await;
     get_platform_config(&client).await;
     get_payment_config(&client).await;
@@ -21,13 +21,7 @@ async fn main() {
 
 async fn get_quote(client: &GateFiRestClient) {
     let address = client
-        .get_quote(
-            "500",
-            "BTC",
-            "MXN",
-            "BANKCARD",
-            "MX",
-        )
+        .get_quote("500", "BTC", "MXN", "BANKCARD", "MX")
         .await;
     println!("get_quote result: {address:?}");
 }
