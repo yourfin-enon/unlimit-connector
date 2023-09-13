@@ -16,6 +16,38 @@ pub struct GetQuoteRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiPaymentMethodsRequest {
+    #[serde(rename = "currencyIso")]
+    pub currency_iso: String,
+    #[serde(rename = "countryCode")]
+    pub country_code: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiPaymentMethodsResponse {
+    #[serde(rename = "list")]
+    pub list: Vec<GateFiCurrencyPaymentMethod>,
+    #[serde(rename = "total")]
+    pub total: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct GateFiCurrencyPaymentMethod {
+    #[serde(rename = "code")]
+    pub code: String,
+    #[serde(rename = "processingFee")]
+    pub processing_fee_percent: f64,
+    #[serde(rename = "processingFeeFix")]
+    pub processing_fee_fix: f64,
+    #[serde(rename = "processingFeeMin")]
+    pub processing_fee_min: f64,
+    #[serde(rename = "openMode")]
+    pub open_mode: String,
+    #[serde(rename = "title")]
+    pub title: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GateFiPlatformConfigResponse {
     pub version: String,
     #[serde(rename = "updatedAt")]

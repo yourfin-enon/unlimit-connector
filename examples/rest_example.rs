@@ -7,10 +7,11 @@ use unlimit_connector::rest::rest_client::{
 #[tokio::main]
 async fn main() {
     let client = GateFiRestClient::new(
-        "test".to_owned(),
+        "04e4aa48-a7d6-4890-921f-fa1c6a9fe873".to_owned(),
         "test".to_owned(),
         "test".to_owned(),
         GateFiApiConfig::sandbox());
+    get_payment_methods(&client).await;
     get_platform_config(&client).await;
     get_payment_config(&client).await;
     get_rates(&client).await;
@@ -59,4 +60,11 @@ async fn get_rates(client: &GateFiRestClient) {
 async fn get_payment_config(client: &GateFiRestClient) {
     let result = client.get_payment_config().await;
     println!("get_payment_config result: {result:?}");
+}
+
+async fn get_payment_methods(client: &GateFiRestClient) {
+    let country = "DE";
+    let currency = "USD";
+    let result = client.get_payment_methods(currency, country).await;
+    println!("get_payment_methods result: {result:?}");
 }

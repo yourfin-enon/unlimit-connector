@@ -1,10 +1,7 @@
 use crate::rest::config::GateFiApiConfig;
 use crate::rest::endpoints::GateFiEndpoint;
 use crate::rest::errors::Error;
-use crate::rest::models::{
-    GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse,
-    GateFiPlatformConfigResponse, GateFiRatesResponse, GetQuoteRequest, GetQuoteResponse,
-};
+use crate::rest::models::{GateFiBuyAssetRequest, GateFiBuyAssetResponse, GateFiPaymentConfigResponse, GateFiPlatformConfigResponse, GateFiRatesResponse, GateFiPaymentMethodsRequest, GetQuoteRequest, GetQuoteResponse, GateFiPaymentMethodsResponse};
 use crate::rest::request_signer::GateFiRequestSigner;
 use error_chain::bail;
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
@@ -64,6 +61,21 @@ impl GateFiRestClient {
 
     pub async fn get_rates(&self) -> Result<GateFiRatesResponse, Error> {
         let resp: GateFiRatesResponse = self.get_signed(GateFiEndpoint::Rates, None).await?;
+
+        Ok(resp)
+    }
+
+    pub async fn get_payment_methods(
+        &self,
+        currency_ico: impl Into<String>,
+        country_code: impl Into<String>,
+    ) -> Result<GateFiPaymentMethodsResponse, Error> {
+        let request = GateFiPaymentMethodsRequest {
+            currency_iso: currency_ico.into(),
+            country_code: country_code.into(),
+        };
+        let query = serde_qs::to_string(&request).unwrap();
+        let resp = self.get_signed(GateFiEndpoint::PaymentMethods, Some(&query)).await?;
 
         Ok(resp)
     }
@@ -207,7 +219,12 @@ impl GateFiRestClient {
 
                 let body: Result<T, _> = serde_json::from_str(&json);
                 if let Err(err) = body {
-                    bail!("Url {}. Failed to deserialize body {:?}: {}", request_url, err, json);
+                    bail!(
+                        "Url {}. Failed to deserialize body {:?}: {}",
+                        request_url,
+                        err,
+                        json
+                    );
                 }
 
                 Ok(body.unwrap())

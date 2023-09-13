@@ -6,6 +6,7 @@ pub enum GateFiEndpoint {
     BuyAsset,
     Rates,
     PaymentConfig,
+    PaymentMethods
 }
 
 impl From<&GateFiEndpoint> for String {
@@ -16,6 +17,7 @@ impl From<&GateFiEndpoint> for String {
             GateFiEndpoint::BuyAsset => "/onramp/v1/buy",
             GateFiEndpoint::Rates => "/api/v1/rates",
             GateFiEndpoint::PaymentConfig => "/api/v1/config",
+            GateFiEndpoint::PaymentMethods => "/api/v1/methods/currencies",
         })
     }
 }
@@ -28,6 +30,7 @@ impl GateFiEndpoint {
             GateFiEndpoint::BuyAsset => Method::GET,
             GateFiEndpoint::Rates => Method::GET,
             GateFiEndpoint::PaymentConfig => Method::GET,
+            GateFiEndpoint::PaymentMethods => Method::GET,
         }
     }
 }
