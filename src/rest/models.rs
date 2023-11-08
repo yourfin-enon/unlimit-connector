@@ -215,6 +215,10 @@ pub struct GateFiCallbackData {
     #[serde(rename = "transactionId")]
     pub transaction_id: String,
     pub status: String,
+    #[serde(rename = "failReason")]
+    pub fail_reason: Option<String>,
+    #[serde(rename = "paymentMethod")]
+    pub payment_method: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
