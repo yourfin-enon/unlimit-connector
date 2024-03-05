@@ -6,7 +6,7 @@ use unlimit_connector::rest::rest_client::{GateFiBuyAssetParams, GateFiRestClien
 #[tokio::main]
 async fn main() {
     let client = GateFiRestClient::new(
-        "test".to_owned(),
+        "test1".to_owned(),
         "test".to_owned(),
         "test".to_owned(),
         GateFiApiConfig::sandbox(),
