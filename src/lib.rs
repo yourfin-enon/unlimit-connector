@@ -1,2 +1,2 @@
 pub mod rest;
-pub mod payment_url;
+pub mod payment_page;
